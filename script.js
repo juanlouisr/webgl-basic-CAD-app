@@ -5,9 +5,10 @@ gl = WebGLUtils.setupWebGL( canvas );
 
 var vBufferId = gl.createBuffer();
 var cBufferId = gl.createBuffer();
+
 var isDrawing = false;
 
-window.onload = function init(){
+window.onload = () => {
   if ( !gl ) { alert( "WebGL isn't available" ); }
 
   // Resize Canvas for the first time
@@ -22,37 +23,81 @@ window.onload = function init(){
 }
 
 function resizeCanvas(){
-  gl.canvas.width = (4 / 5) * window.innerWidth;
-  gl.canvas.height = (4 / 5) * window.innerWidth;
+  gl.canvas.width = (9 / 12) * window.innerWidth;
+  gl.canvas.height = (9 / 12) * window.innerWidth;
   gl.viewport( 0, 0, canvas.width, canvas.height );
 }
 window.addEventListener("resize", () => resizeCanvas());
 
-canvas.addEventListener("mousedown", (e) => {
-  isDrawing = !isDrawing;
+function listenForMouseDown(event) {
+  if (selectMode.value == "draw"){
+    if (selectShape.value == "line") {
+      isDrawing = !isDrawing;
 
-  if (isDrawing){
-    // this starts the draw, pushing new vertex for mousemove event to change
-    var rect = e.target.getBoundingClientRect();
-    var x = ((e.clientX - rect.left) / gl.canvas.width) * 2 - 1;
-    var y = (((e.clientY - rect.top) / gl.canvas.width) * 2 - 1) * -1;
-    data["line"]["vertices"].push([x,y,x,y]);
-    data["line"]["colors"].push([0,0,0,1,0,0,0,1]);
-    // console.log("Left? : " + x + " ; Top? : " + y + ".");
+      if (isDrawing){
+        // this starts the draw, pushing two vertices for mousemove event to change the second one
+        const pos = getCursorPos(event);
+        data["line"]["vertices"].push([pos.x,pos.y,pos.x,pos.y]);
+        data["line"]["colors"].push([0,0,0,1,0,0,0,1]);
+        // console.log("Left? : " + x + " ; Top? : " + y + ".");
+      }
+    }
+    else if (selectShape.value == "square"){
+
+    }
+    else if (selectShape.value == "rectangle"){
+
+    }
+    else if (selectShape.value == "polygon"){
+
+    }
   }
+  else if (selectMode.value == "change-color"){
 
-});
-
-canvas.addEventListener("mousemove", (e) => {
-  if (isDrawing){
-    var rect = e.target.getBoundingClientRect();
-    var x = ((e.clientX - rect.left) / gl.canvas.width) * 2 - 1;
-    var y = (((e.clientY - rect.top) / gl.canvas.width) * 2 - 1) * -1;
-    data["line"]["vertices"][data["line"]["vertices"].length - 1][2] = x;
-    data["line"]["vertices"][data["line"]["vertices"].length - 1][3] = y;
-    render();
   }
-});
+  else if (selectMode.value == "move-point"){
+
+  }
+}
+canvas.addEventListener("mousedown", (event) => listenForMouseDown(event));
+
+function listenForMouseMove(event){
+  if (selectMode.value == "draw"){
+    if (selectShape.value == "line") {
+      if (isDrawing){
+        // change the second coordinate of line, then rerender
+        const pos = getCursorPos(event);
+        data["line"]["vertices"][data["line"]["vertices"].length - 1][2] = pos.x;
+        data["line"]["vertices"][data["line"]["vertices"].length - 1][3] = pos.y;
+        render();
+      }
+    }
+    else if (selectShape.value == "square"){
+
+    }
+    else if (selectShape.value == "rectangle"){
+
+    }
+    else if (selectShape.value == "polygon"){
+
+    }
+  }
+  else if (selectMode.value == "change-color"){
+
+  }
+  else if (selectMode.value == "move-point"){
+
+  }
+}
+canvas.addEventListener("mousemove", (event) => listenForMouseMove(event));
+
+function getCursorPos(event){
+  const rect = event.target.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / gl.canvas.width) * 2 - 1;
+  const y = (((event.clientY - rect.top) / gl.canvas.width) * 2 - 1) * -1;
+
+  return {x: x, y: y};
+}
 
 function setupWebGL(){
   // Configure WebGL
@@ -92,17 +137,3 @@ function render() {
     }
   }
 }  
-
-  // // Squares
-  // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferId);
-  // gl.bufferSubData(gl.ARRAY_BUFFER, 0, flatten(squareVertices));
-  // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferId);
-  // gl.bufferSubData(gl.ARRAY_BUFFER, 0, flatten(squareColors));
-
-  // if (squareVertices.length != 0) {
-  //   for (var i = 0; i < data["line"]["vertices"].length; i++) {
-  //     gl.drawArrays(gl.TRIANGLES, i*4 , 4);
-  //   }
-  // }
-
-  // [x1,y1,x2,y2,x3,y3,x4,y4]

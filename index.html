@@ -26,9 +26,44 @@
   </head>
   <body>
     <html>
-      <canvas id="gl-canvas">
-        Oops ... your browser doesn't support the HTML5 canvas element
-      </canvas>
+      <div id="container">
+        <canvas id="gl-canvas">
+          Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+
+        <div id="side-menu-container">
+          <div class="select-options">
+            Select Mode : 
+            <select id="select-mode">
+              <option value="draw">Draw</option>
+              <option value="change-color">Change Color</option>
+              <option value="move-point">Move Point</option>
+           </select>
+          </div>
+
+          <div class="select-options" id="option-shape">
+            Select Shape : 
+            <select id="select-shape">
+              <option value="line">Line</option>
+              <option value="square">Square</option>
+              <option value="rectangle">Rectangle</option>
+              <option value="polygon">Polygon</option>
+            </select>
+          </div>
+
+          <div class="select-options" id="option-polygon-node">
+            Number of Polygon Node: 
+            <input type="number" id="input-polygon-node" name="input-polygon-node" min=3 value=3>
+          </div>
+
+          <button input="button" id="btn-help">Help</button>
+          <button input="button" id="btn-clear">Clear Canvas</button>
+
+         
+        </div>
+        
+
+      </div>
     </html>
   </body>
 
@@ -38,6 +73,7 @@
   <script src="https://www.cs.unm.edu/~angel/COURSERA/CODE/Common/MV.js"></script>
   
   <link rel="stylesheet" href="./style.css" />
+  <script src="./ui.js"></script>
   <script src="./data.js"></script>
   <script src="./script.js"></script>
 </html>
