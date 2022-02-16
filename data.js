@@ -1,0 +1,6 @@
+data = {
+  "line": {
+    "vertices": [],
+    "colors": []
+  }
+}
