@@ -1,6 +1,10 @@
-data = {
-  "line": {
-    "vertices": [],
-    "colors": []
+data = {}
+
+function initAndClearData() {
+  data = {
+    "line": {
+      "vertices": [],
+      "colors": []
+    }
   }
 }
