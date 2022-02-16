@@ -22,6 +22,4 @@ document.getElementById("btn-help").onclick = () => {
   console.log("help");
 }
 
-document.getElementById("btn-clear").onclick = () => {
-  console.log("clear");
-}
+document.getElementById("btn-clear").onclick = () => clearCanvas();
