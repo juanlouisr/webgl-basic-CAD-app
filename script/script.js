@@ -1,61 +1,40 @@
 var CONST_MAX_VERTICES = 500;
 
 var canvas = document.getElementById( "gl-canvas" );
-gl = WebGLUtils.setupWebGL( canvas );
+gl = canvas.getContext('webgl');
 
-var vBufferId = gl.createBuffer();
-var cBufferId = gl.createBuffer();
+// var vBufferId = gl.createBuffer();
+// var cBufferId = gl.createBuffer();
 
 var isDrawing = false;
 
 function initialize(){
   if ( !gl ) { alert( "WebGL isn't available" ); }
 
-  // Resize Canvas for the first time
+  // Resize Canvas Size for the first time
   resizeCanvas();
 
   // Initialize Data
   initAndClearData();
 
-  // Setup WebGL
-  setupWebGL();
-
-  // Show the canvas color
-  gl.clear( gl.COLOR_BUFFER_BIT );
+  // Init Canvas
+  initCanvas();
 }
 window.onload = () => initialize();
 
-function setupWebGL(){
+// ********************** CANVAS ****************************
+function initCanvas(){
   // Configure WebGL
   gl.viewport( 0, 0, canvas.width, canvas.height );
   gl.clearColor( 0.8, 0.8, 0.8, 1.0 );
-
-  // Load shaders and initialize attribute buffers
-  var program = initShaders( gl, "vertex-shader", "fragment-shader");
-  gl.useProgram( program );
-
-  // Load Data ke GPU
-  gl.bindBuffer(gl.ARRAY_BUFFER, vBufferId);
-  gl.bufferData(gl.ARRAY_BUFFER, 8 * CONST_MAX_VERTICES, gl.STATIC_DRAW);
-  var vPos = gl.getAttribLocation(program, "vPosition");
-  gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(vPos);
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, cBufferId);
-  gl.bufferData(gl.ARRAY_BUFFER, 16 * CONST_MAX_VERTICES, gl.STATIC_DRAW);
-  var vColor = gl.getAttribLocation(program, "vColor");
-  gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(vColor);
+  gl.clear( gl.COLOR_BUFFER_BIT );
 }
-window.addEventListener("resize", () => resizeCanvas());
-
-// ********************** CANVAS ****************************
-
 function resizeCanvas(){
   gl.canvas.width = (9 / 12) * window.innerWidth;
   gl.canvas.height = (9 / 12) * window.innerWidth;
   gl.viewport( 0, 0, canvas.width, canvas.height );
 }
+window.addEventListener("resize", () => resizeCanvas());
 
 function canvasListenForMouseDown(event) {
   if (selectMode.value == "draw"){
@@ -125,7 +104,6 @@ function clearCanvas(){
 }
 
 // ************************ MOUSE ***************************
-
 function getCursorPos(event){
   const rect = event.target.getBoundingClientRect();
   const x = ((event.clientX - rect.left) / gl.canvas.width) * 2 - 1;
@@ -135,19 +113,23 @@ function getCursorPos(event){
 }
 
 // ************************ RENDER ***************************
-
 function render() {
   gl.clear( gl.COLOR_BUFFER_BIT );
+  var shader = initShaders(gl);
 
   // Lines
-  gl.bindBuffer(gl.ARRAY_BUFFER, vBufferId);
-  gl.bufferSubData(gl.ARRAY_BUFFER, 0, flatten(data["line"]["vertices"]));
-  gl.bindBuffer(gl.ARRAY_BUFFER, cBufferId);
-  gl.bufferSubData(gl.ARRAY_BUFFER, 0, flatten(data["line"]["colors"]));
+  let lineVertexBuffer = fillBuffer(gl, gl.ARRAY_BUFFER, new Float32Array(data["line"]["vertices"].flat(2)));
+  gl.bindBuffer(gl.ARRAY_BUFFER, lineVertexBuffer);
+  activateAttr(shader, "vPosition", 2);
+
+  let lineColorBuffer = fillBuffer(gl, gl.ARRAY_BUFFER, new Float32Array(data["line"]["colors"].flat(2)));
+  gl.bindBuffer(gl.ARRAY_BUFFER, lineColorBuffer);
+  activateAttr(shader, "vColor", 4);
 
   if (data["line"]["vertices"].length != 0) {
     for (var i = 0; i < data["line"]["vertices"].length; i++) {
       gl.drawArrays(gl.LINES, i*2 , 2);
     }
   }
+
 }  
