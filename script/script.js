@@ -115,7 +115,7 @@ function getCursorPos(event){
 function getNearestVertex(event){
   const pos = getCursorPos(event);
   const errorDelta = 0.1;
-  const types = ["line", "square", "recrtangle","polygon"];
+  const types = ["line","square","rectangle","polygon"];
 
   types.filter((type) => data[type] !== undefined).forEach((type) => {
     for (var index = 0; index < data[type]["vertices"].length; index++) {
