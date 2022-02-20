@@ -44,14 +44,15 @@ window.addEventListener("resize", () => resizeCanvas());
 
 function canvasListenForMouseDown(event) {
   isDrawing = !isDrawing;
+  if (!isDrawing) return;
 
   switch(selectMode.value){
     case "draw":
       switch(selectShape.value){
-        case "line" : handleMouseLine(event, "draw", "mouse-down", isDrawing); break;
-        case "square" : handleMouseSquare(event, "draw", "mouse-down", isDrawing); break;
-        case "rectangle" : handleMouseRectangle(event, "draw", "mouse-down", isDrawing); break;
-        case "polygon" : handleMousePolygon(event, "draw", "mouse-down", isDrawing); break;
+        case "line" : handleMouseLine(event, "draw", "mouse-down"); break;
+        case "square" : handleMouseSquare(event, "draw", "mouse-down"); break;
+        case "rectangle" : handleMouseRectangle(event, "draw", "mouse-down"); break;
+        case "polygon" : handleMousePolygon(event, "draw", "mouse-down"); break;
       }
       break;
 
@@ -62,6 +63,7 @@ function canvasListenForMouseDown(event) {
 
     case "move-point":
       getNearestVertex(event);
+      console.log(currVertexToDrag)
       break;
 
   }
@@ -89,7 +91,7 @@ function canvasListenForMouseMove(event) {
       break;
       
     case "move-point":
-      switch(selectShape.value){
+      switch(currVertexToDrag.type){
         case "line" : handleMouseLine(event, "move-point"); break;
         case "square" : handleMouseSquare(event, "move-point"); break;
         case "rectangle" : handleMouseRectangle(event, "move-point"); break;
@@ -132,7 +134,7 @@ function getNearestVertex(event) {
           var b = data[type]["vertices"][index][x + 1];
           if (pos.x - errorDelta <= a && a <= pos.x + errorDelta) {
             if (pos.y - errorDelta <= b && b <= pos.y + errorDelta) {
-              // console.log("Ketemu titik di: " + a + " " + b);
+              console.log("Ketemu titik di: " + a + " " + b);
               currVertexToDrag = {
                 type: type,
                 shapeIndex: index,

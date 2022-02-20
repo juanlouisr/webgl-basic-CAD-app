@@ -1,4 +1,4 @@
-function handleMousePolygon(event, mode, interactionType, isDrawing){
+function handleMousePolygon(event, mode, interactionType){
   if (mode == "draw"){
     if (interactionType == "mouse-down"){
       

@@ -1,11 +1,9 @@
-function handleMouseLine(event, mode, interactionType, isDrawing){
+function handleMouseLine(event, mode, interactionType){
   if (mode == "draw"){
     if (interactionType == "mouse-down"){
-      if (isDrawing) {
-        const pos = getCursorPos(event);
-        data["line"]["vertices"].push([pos.x, pos.y, pos.x, pos.y]);
-        data["line"]["colors"].push([0, 0, 0, 1, 0, 0, 0, 1]);
-      }
+      const pos = getCursorPos(event);
+      data["line"]["vertices"].push([pos.x, pos.y, pos.x, pos.y]);
+      data["line"]["colors"].push([0, 0, 0, 1, 0, 0, 0, 1]);
     }
     else if (interactionType == "mouse-move"){
       const pos = getCursorPos(event);

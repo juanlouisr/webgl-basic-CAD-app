@@ -1,11 +1,9 @@
-function handleMouseRectangle(event, mode, interactionType, isDrawing){
+function handleMouseRectangle(event, mode, interactionType){
   if (mode == "draw"){
     if (interactionType == "mouse-down"){
-      if (isDrawing) {
-        const pos = getCursorPos(event);
-        data["rectangle"]["vertices"].push(initVertexArray(pos.x, pos.y, 4));
-        data["rectangle"]["colors"].push(initColorArray(shapeColor, 4));
-      }
+      const pos = getCursorPos(event);
+      data["rectangle"]["vertices"].push(initVertexArray(pos.x, pos.y, 4));
+      data["rectangle"]["colors"].push(initColorArray(shapeColor, 4));
     }
     else if (interactionType == "mouse-move"){
       const pos = getCursorPos(event);
