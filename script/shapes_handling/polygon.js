@@ -32,7 +32,12 @@ function handleMousePolygon(event, mode, interactionType){
   }
 
   else if (mode == "move-point"){
-    
+    const pos = getCursorPos(event);
+    data["polygon"]["vertices"][currVertexToDrag.shapeIndex][currVertexToDrag.firstVertIdx] =
+      pos.x;
+    data["polygon"]["vertices"][currVertexToDrag.shapeIndex][currVertexToDrag.firstVertIdx+1] =
+      pos.y;
+    render();
   }
 }
 
