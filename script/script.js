@@ -121,7 +121,7 @@ function getCursorPos(event) {
 
 function getNearestVertex(event) {
   const pos = getCursorPos(event);
-  const errorDelta = 0.1;
+  const errorDelta = 0.03;
   const types = ["line", "square", "rectangle", "polygon"];
 
   types
@@ -157,5 +157,5 @@ function render() {
   renderLines(shader)
   renderSquares(shader)
   renderRectangles(shader)
-  // renderPolygons(shader)
+  renderPolygons(shader)
 }

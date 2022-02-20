@@ -14,5 +14,9 @@ function initAndClearData() {
       vertices: [],
       colors: [],
     },
+    polygon: {
+      vertices: [],
+      colors: [],
+    },
   };
 }
