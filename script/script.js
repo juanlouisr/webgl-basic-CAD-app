@@ -71,7 +71,6 @@ function canvasListenForMouseDown(event) {
 
       if (isDrawing) {
         const pos = getCursorPos(event);
-        console.log("dalem change rectangle", shapeColor);
         data["rectangle"]["vertices"].push(initVertexArray(pos.x, pos.y, 4));
         data["rectangle"]["colors"].push(initColorArray(shapeColor, 4));
       }
@@ -80,8 +79,10 @@ function canvasListenForMouseDown(event) {
   } else if (selectMode.value == "change-color") {
     color = document.getElementById("shape-color").value;
     shapeColor = hexToRGB(color);
-    console.log("dalem change color", shapeColor);
   } else if (selectMode.value == "move-point") {
+  } else if (selectMode.value == "change-color") {
+  } else if (selectMode.value == "move-point") {
+    const loc = getNearestVertex(event);
   }
 }
 canvas.addEventListener("mousedown", (event) =>
@@ -165,6 +166,36 @@ function getCursorPos(event) {
   const y = (((event.clientY - rect.top) / gl.canvas.width) * 2 - 1) * -1;
 
   return { x: x, y: y };
+}
+
+function getNearestVertex(event) {
+  const pos = getCursorPos(event);
+  const errorDelta = 0.1;
+  const types = ["line", "square", "rectangle", "polygon"];
+
+  types
+    .filter((type) => data[type] !== undefined)
+    .forEach((type) => {
+      for (var index = 0; index < data[type]["vertices"].length; index++) {
+        for (var x = 0; x < data[type]["vertices"][index].length; x += 2) {
+          // console.log(x);
+          var a = data[type]["vertices"][index][x];
+          var b = data[type]["vertices"][index][x + 1];
+          if (pos.x - errorDelta <= a && a <= pos.x + errorDelta) {
+            if (pos.y - errorDelta <= b && b <= pos.y + errorDelta) {
+              // console.log("Ketemu titik di: " + a + " " + b);
+              return {
+                tipe: type,
+                shapeIndex: index,
+                vertexIndex: x,
+                x: a,
+                y: b,
+              };
+            }
+          }
+        }
+      }
+    });
 }
 
 // ************************ RENDER ***************************
