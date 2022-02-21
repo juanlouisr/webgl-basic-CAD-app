@@ -24,6 +24,15 @@ selectMode.onchange = () => {
 };
 
 // Button On Clicks
+document.getElementById("btn-load").onchange = (e) => {
+  loadFile = e.target.files[0];
+  console.log(loadFile);
+};
+
+document.getElementById("btn-save").onclick = () => {
+  download(JSON.stringify(data), "2d-cad.json", "text/plain");
+};
+
 document.getElementById("btn-help").onclick = () => {
   console.log("help");
 };
