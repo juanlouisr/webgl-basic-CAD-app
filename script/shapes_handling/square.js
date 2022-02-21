@@ -1,47 +1,46 @@
-function handleMouseSquare(event, mode, interactionType){
-  if (mode == "draw"){
-    if (interactionType == "mouse-down"){
+function handleMouseSquare(event, mode, interactionType) {
+  if (mode == "draw") {
+    if (interactionType == "mouse-down") {
       const pos = getCursorPos(event);
-      data["square"]["vertices"].push(
-        [pos.x, pos.y, pos.x, pos.y, pos.x, pos.y],
-        [pos.x, pos.y, pos.x, pos.y, pos.x, pos.y]
-      );
-      data["square"]["colors"].push(
-        [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
-        [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1]
-      );
-    }
-    else if (interactionType == "mouse-move"){
+      data["square"]["vertices"].push(initVertexArray(pos.x, pos.y, 4));
+      data["square"]["colors"].push(initColorArray(shapeColor, 4));
+    } else if (interactionType == "mouse-move") {
       const pos = getCursorPos(event);
-      vertices = data["square"]["vertices"];
-      lastIdx = data["square"]["vertices"].length - 1;
-      originX = vertices[lastIdx][0];
-      originY = vertices[lastIdx][1];
+      const originX =
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][0];
+      const originY =
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][1];
 
-      // First triangle
-      vertices[lastIdx][2] = pos.x;
-      vertices[lastIdx][3] =
-        pos.y + getEdgeLength(originX, originY, pos.x, pos.y);
-      vertices[lastIdx][4] = pos.x;
-      vertices[lastIdx][5] = pos.y;
+      const distanceX = Math.abs(originX - pos.x);
+      const distanceY = Math.abs(originY - pos.y);
 
-      // Second triangle
-      vertices[lastIdx - 1][2] =
-        pos.x - getEdgeLength(originX, originY, pos.x, pos.y);
-      vertices[lastIdx - 1][3] = pos.y;
-      vertices[lastIdx - 1][4] = pos.x;
-      vertices[lastIdx - 1][5] = pos.y;
+      if (distanceX < distanceY) {
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][2] =
+          pos.x;
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][4] =
+          pos.x;
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][5] =
+          originY < pos.y ? originY + distanceX : originY - distanceX;
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][7] =
+          originY < pos.y ? originY + distanceX : originY - distanceX;
+      } else if (distanceX > distanceY) {
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][2] =
+          originX < pos.x ? originX + distanceY : originX - distanceY;
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][4] =
+          originX < pos.x ? originX + distanceY : originX - distanceY;
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][5] =
+          pos.y;
+        data["square"]["vertices"][data["square"]["vertices"].length - 1][7] =
+          pos.y;
+      }
 
       render();
     }
-  }
-
-  else if (mode == "move-point"){
-    
+  } else if (mode == "move-point") {
   }
 }
 
-function renderSquares(shader){
+function renderSquares(shader) {
   let squareVertexBuffer = fillBuffer(
     gl,
     gl.ARRAY_BUFFER,
@@ -60,7 +59,7 @@ function renderSquares(shader){
 
   if (data["square"]["vertices"].length != 0) {
     for (var i = 0; i < data["square"]["vertices"].length; i++) {
-      gl.drawArrays(gl.TRIANGLES, i * 3, 3);
+      gl.drawArrays(gl.TRIANGLE_FAN, i * 4, 4);
     }
   }
 }
