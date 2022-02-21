@@ -7,7 +7,7 @@ var optionPolygonNode = document.getElementById("option-polygon-node");
 var optionColor = document.getElementById("option-color");
 
 //temporary
-optionColor.style.visibility = "hidden";
+// optionColor.style.visibility = "hidden";
 // TODO : refactor to make switching better
 
 // set visibility of select options
@@ -15,11 +15,17 @@ selectMode.onchange = () => {
   optionShape.style.visibility = "hidden";
   optionPolygonNode.style.visibility = "hidden";
   optionColor.style.visibility = "hidden";
+  
   if (selectMode.value == "draw") {
     optionShape.style.visibility = "visible";
     optionPolygonNode.style.visibility = "visible";
-  } else if (selectMode.value == "change-color") {
     optionColor.style.visibility = "visible";
+  }
+  else if (selectMode.value == "change-color"){
+    optionColor.style.visibility = "visible";
+  }
+  else if (selectMode.value == "move-point"){
+    optionColor.style.visibility = "hidden";
   }
 };
 
