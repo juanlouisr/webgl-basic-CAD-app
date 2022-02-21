@@ -5,6 +5,7 @@ var inputPolygonNode = document.getElementById("input-polygon-node");
 var optionShape = document.getElementById("option-shape");
 var optionPolygonNode = document.getElementById("option-polygon-node");
 var optionColor = document.getElementById("option-color");
+var shapeColor = hexToRGB(document.getElementById("shape-color").value);
 
 //temporary
 // optionColor.style.visibility = "hidden";
@@ -15,16 +16,14 @@ selectMode.onchange = () => {
   optionShape.style.visibility = "hidden";
   optionPolygonNode.style.visibility = "hidden";
   optionColor.style.visibility = "hidden";
-  
+
   if (selectMode.value == "draw") {
     optionShape.style.visibility = "visible";
     optionPolygonNode.style.visibility = "visible";
     optionColor.style.visibility = "visible";
-  }
-  else if (selectMode.value == "change-color"){
+  } else if (selectMode.value == "change-color") {
     optionColor.style.visibility = "visible";
-  }
-  else if (selectMode.value == "move-point"){
+  } else if (selectMode.value == "move-point") {
     optionColor.style.visibility = "hidden";
   }
 };
@@ -32,7 +31,12 @@ selectMode.onchange = () => {
 // Button On Clicks
 document.getElementById("btn-load").onchange = (e) => {
   loadFile = e.target.files[0];
-  console.log(loadFile);
+  reader = new FileReader();
+  reader.onload = (e) => {
+    data = JSON.parse(e.target.result);
+    render();
+  };
+  reader.readAsText(loadFile);
 };
 
 document.getElementById("btn-save").onclick = () => {
@@ -44,3 +48,8 @@ document.getElementById("btn-help").onclick = () => {
 };
 
 document.getElementById("btn-clear").onclick = () => clearCanvas();
+
+//Set color changes
+document.getElementById("shape-color").onchange = (e) => {
+  shapeColor = hexToRGB(e.target.value);
+};

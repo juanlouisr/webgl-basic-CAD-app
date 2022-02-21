@@ -7,8 +7,8 @@ gl = canvas.getContext("webgl");
 // var cBufferId = gl.createBuffer();
 
 var isDrawing = false;
-var color = document.getElementById("shape-color").value;
-var shapeColor = hexToRGB(color);
+// var color = document.getElementById("shape-color").value;
+// var shapeColor = hexToRGB(color);
 
 var currVertexToDrag = {};
 
@@ -46,13 +46,21 @@ function canvasListenForMouseDown(event) {
   isDrawing = !isDrawing;
   if (!isDrawing) return;
 
-  switch(selectMode.value){
+  switch (selectMode.value) {
     case "draw":
-      switch(selectShape.value){
-        case "line" : handleMouseLine(event, "draw", "mouse-down"); break;
-        case "square" : handleMouseSquare(event, "draw", "mouse-down"); break;
-        case "rectangle" : handleMouseRectangle(event, "draw", "mouse-down"); break;
-        case "polygon" : handleMousePolygon(event, "draw", "mouse-down"); break;
+      switch (selectShape.value) {
+        case "line":
+          handleMouseLine(event, "draw", "mouse-down");
+          break;
+        case "square":
+          handleMouseSquare(event, "draw", "mouse-down");
+          break;
+        case "rectangle":
+          handleMouseRectangle(event, "draw", "mouse-down");
+          break;
+        case "polygon":
+          handleMousePolygon(event, "draw", "mouse-down");
+          break;
       }
       break;
 
@@ -63,9 +71,8 @@ function canvasListenForMouseDown(event) {
 
     case "move-point":
       getNearestVertex(event);
-      console.log(currVertexToDrag)
+      console.log(currVertexToDrag);
       break;
-
   }
 }
 canvas.addEventListener("mousedown", (event) =>
@@ -75,30 +82,45 @@ canvas.addEventListener("mousedown", (event) =>
 function canvasListenForMouseMove(event) {
   if (!isDrawing) return;
 
-  switch(selectMode.value){
+  switch (selectMode.value) {
     case "draw":
-      switch(selectShape.value){
-        case "line" :  handleMouseLine(event, "draw", "mouse-move"); break;
-        case "square" : handleMouseSquare(event, "draw", "mouse-move"); break;
-        case "rectangle" : handleMouseRectangle(event, "draw", "mouse-move"); break;
-        case "polygon" : handleMousePolygon(event, "draw", "mouse-move"); break;
-      };
+      switch (selectShape.value) {
+        case "line":
+          handleMouseLine(event, "draw", "mouse-move");
+          break;
+        case "square":
+          handleMouseSquare(event, "draw", "mouse-move");
+          break;
+        case "rectangle":
+          handleMouseRectangle(event, "draw", "mouse-move");
+          break;
+        case "polygon":
+          handleMousePolygon(event, "draw", "mouse-move");
+          break;
+      }
       break;
 
     case "change-color":
       color = document.getElementById("shape-color").value;
       shapeColor = hexToRGB(color);
       break;
-      
+
     case "move-point":
-      switch(currVertexToDrag.type){
-        case "line" : handleMouseLine(event, "move-point"); break;
-        case "square" : handleMouseSquare(event, "move-point"); break;
-        case "rectangle" : handleMouseRectangle(event, "move-point"); break;
-        case "polygon" : handleMousePolygon(event, "move-point"); break;
-      };
+      switch (currVertexToDrag.type) {
+        case "line":
+          handleMouseLine(event, "move-point");
+          break;
+        case "square":
+          handleMouseSquare(event, "move-point");
+          break;
+        case "rectangle":
+          handleMouseRectangle(event, "move-point");
+          break;
+        case "polygon":
+          handleMousePolygon(event, "move-point");
+          break;
+      }
       break;
-    
   }
 }
 canvas.addEventListener("mousemove", (event) =>
@@ -154,8 +176,8 @@ function render() {
   gl.clear(gl.COLOR_BUFFER_BIT);
   var shader = initShaders(gl);
 
-  renderLines(shader)
-  renderSquares(shader)
-  renderRectangles(shader)
-  renderPolygons(shader)
+  renderLines(shader);
+  renderSquares(shader);
+  renderRectangles(shader);
+  renderPolygons(shader);
 }
