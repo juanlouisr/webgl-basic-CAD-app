@@ -1,11 +1,10 @@
-function handleMouseRectangle(event, mode, interactionType){
-  if (mode == "draw"){
-    if (interactionType == "mouse-down"){
+function handleMouseRectangle(event, mode, interactionType) {
+  if (mode == "draw") {
+    if (interactionType == "mouse-down") {
       const pos = getCursorPos(event);
       data["rectangle"]["vertices"].push(initVertexArray(pos.x, pos.y, 4));
       data["rectangle"]["colors"].push(initColorArray(shapeColor, 4));
-    }
-    else if (interactionType == "mouse-move"){
+    } else if (interactionType == "mouse-move") {
       const pos = getCursorPos(event);
 
       data["rectangle"]["vertices"][
@@ -23,14 +22,41 @@ function handleMouseRectangle(event, mode, interactionType){
 
       render();
     }
-  }
+  } else if (mode == "move-point") {
+    const pos = getCursorPos(event);
 
-  else if (mode == "move-point"){
-    
+    switch (currVertexToDrag.firstVertIdx) {
+      case 0:
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][0] = pos.x;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][1] = pos.y;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][3] = pos.y;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][6] = pos.x;
+        break;
+      case 2:
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][1] = pos.y;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][2] = pos.x;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][3] = pos.y;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][4] = pos.x;
+        break;
+      case 4:
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][2] = pos.x;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][4] = pos.x;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][5] = pos.y;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][7] = pos.y;
+        break;
+      case 6:
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][0] = pos.x;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][5] = pos.y;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][6] = pos.x;
+        data["rectangle"]["vertices"][currVertexToDrag.shapeIndex][7] = pos.y;
+        break;
+    }
+
+    render();
   }
 }
 
-function renderRectangles(shader){
+function renderRectangles(shader) {
   let rectangleVertexBuffer = fillBuffer(
     gl,
     gl.ARRAY_BUFFER,
