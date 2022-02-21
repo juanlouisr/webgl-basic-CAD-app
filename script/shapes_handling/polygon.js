@@ -1,24 +1,32 @@
+var pointOfRef = {};
+
 function handleMousePolygon(event, mode, interactionType){
   if (mode == "draw"){
+    if (inputPolygonNode.value < 3) return;
     if (interactionType == "mouse-down"){
       const pos = getCursorPos(event);
+      pointOfRef = pos;
       data["polygon"]["vertices"].push(initVertexArray(pos.x, pos.y, inputPolygonNode.value));
       data["polygon"]["colors"].push(initColorArray(shapeColor, inputPolygonNode.value));
     }
     else if (interactionType == "mouse-move"){
       const pos = getCursorPos(event);
-        
-      var posXAwal = data["polygon"]["vertices"]
-      [data["polygon"]["vertices"].length - 1][0];
-      var posYAwal = data["polygon"]["vertices"]
-      [data["polygon"]["vertices"].length - 1][1];
       
+      data["polygon"]["vertices"][
+        data["polygon"]["vertices"].length - 1
+      ][0] = pos.x;
+      data["polygon"]["vertices"][
+        data["polygon"]["vertices"].length - 1
+      ][1] = pos.y;
+
       for (var i = 2; i < data["polygon"]["vertices"][
         data["polygon"]["vertices"].length - 1
       ].length; i+=2) {
         var prevPoint = data["polygon"]["vertices"][
         data["polygon"]["vertices"].length - 1];
-        var newPoint = rotate(posXAwal-pos.x,posYAwal-pos.y,prevPoint[i-2],prevPoint[i-1],360/inputPolygonNode.value);
+        var newPoint = rotate(pointOfRef.x,pointOfRef.y,
+          prevPoint[i-2],prevPoint[i-1],
+          360/inputPolygonNode.value);
         data["polygon"]["vertices"][
           data["polygon"]["vertices"].length - 1
         ][i] = newPoint.x;
