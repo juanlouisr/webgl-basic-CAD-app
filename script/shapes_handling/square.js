@@ -37,6 +37,91 @@ function handleMouseSquare(event, mode, interactionType) {
       render();
     }
   } else if (mode == "move-point") {
+    const pos = getCursorPos(event);
+    const originX =
+      data["square"]["vertices"][currVertexToDrag.shapeIndex][
+        (currVertexToDrag.firstVertIdx + 4) % 8
+      ];
+    const originY =
+      data["square"]["vertices"][currVertexToDrag.shapeIndex][
+        (currVertexToDrag.firstVertIdx + 5) % 8
+      ];
+
+    const distanceX = Math.abs(originX - pos.x);
+    const distanceY = Math.abs(originY - pos.y);
+
+    switch (currVertexToDrag.firstVertIdx) {
+      case 0:
+        if (distanceX < distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][0] = pos.x;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][1] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][3] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][6] = pos.x;
+        } else if (distanceX > distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][0] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][1] = pos.y;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][3] = pos.y;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][6] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+        }
+        break;
+      case 2:
+        if (distanceX < distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][1] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][2] = pos.x;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][3] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][4] = pos.x;
+        } else if (distanceX > distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][1] = pos.y;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][2] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][3] = pos.y;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][4] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+        }
+        break;
+      case 4:
+        if (distanceX < distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][2] = pos.x;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][4] = pos.x;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][5] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][7] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+        } else if (distanceX > distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][2] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][4] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][5] = pos.y;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][7] = pos.y;
+        }
+        break;
+      case 6:
+        if (distanceX < distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][0] = pos.x;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][5] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][6] = pos.x;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][7] =
+            originY < pos.y ? originY + distanceX : originY - distanceX;
+        } else if (distanceX > distanceY) {
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][0] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][5] = pos.y;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][6] =
+            originX < pos.x ? originX + distanceY : originX - distanceY;
+          data["square"]["vertices"][currVertexToDrag.shapeIndex][7] = pos.y;
+        }
+        break;
+    }
+
+    render();
   }
 }
 
