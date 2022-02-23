@@ -75,9 +75,13 @@ function canvasListenForMouseDown(event) {
       break;
 
     case "change-color":
+      isDrawing = !isDrawing;
       getShape(event);
+      getLine(event);
+      console.log(currShapeSelected);
       if (currShapeSelected.type === undefined)
         break;
+      
       color = document.getElementById("shape-color").value;
       shapeColor = hexToRGB(color);
       console.log(data[currShapeSelected.type]["colors"]);
@@ -86,7 +90,6 @@ function canvasListenForMouseDown(event) {
       data[currShapeSelected.type]["colors"][currShapeSelected.shapeIndex]
         = initColorArray(shapeColor, currShapeColorArr.length/4);
       render();
-      isDrawing = !isDrawing;
       break;
 
     case "move-point":
@@ -96,6 +99,7 @@ function canvasListenForMouseDown(event) {
 
     case "move-shape":
       getShape(event);
+      getLine(event);
       if (currShapeSelected.type === undefined)
         break;
       shapeOfRef = [...data[currShapeSelected.type]["vertices"]
@@ -128,11 +132,6 @@ function canvasListenForMouseMove(event) {
           break;
       }
       break;
-
-    // case "change-color":
-    //   color = document.getElementById("shape-color").value;
-    //   shapeColor = hexToRGB(color);
-    //   break;
 
     case "move-point":
       switch (currVertexToDrag.type) {
@@ -238,6 +237,22 @@ function getShape(event) {
       }
     });
 }
+
+function getLine(event) {
+  const pos = getCursorPos(event);
+  for (var i = 0; i < data["line"]["vertices"].length; i++) {
+    var currLine = data["line"]["vertices"][i];
+    if (isInline({x:currLine[0], y:currLine[1]}, 
+      {x:currLine[2], y:currLine[3]},{x:pos.x, y:pos.y})) {
+        currShapeSelected = {
+          type: "line",
+          shapeIndex: i,
+        };
+        break;
+      }
+  }
+}
+
 
 // ************************ RENDER ***************************
 function render() {

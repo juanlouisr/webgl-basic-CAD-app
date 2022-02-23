@@ -174,3 +174,17 @@ function getArrOfPoints(polygon) {
   }
   return arr;
 }
+
+function isInline(A, B, C) {
+  const errorDelta = 0.01;
+  const dis1 = distance(A, B);
+  const dis2 = distance(B, C);
+  const dis3 = distance(A, C);
+  return dis1 - errorDelta  <= dis2 + dis3 
+        && dis2 + dis3  <= dis1 + errorDelta;
+}
+
+function distance(A,B) {
+  return Math.sqrt(Math.pow((A.x-B.x), 2) 
+      + Math.pow((A.y-B.y), 2));
+}
