@@ -40,6 +40,7 @@ function resizeCanvas() {
   gl.canvas.height = window.innerWidth * 0.7;
   gl.viewport(0, 0, canvas.width, canvas.height);
 }
+window.addEventListener("resize", () => resizeCanvas(gl), false);
 
 function canvasListenForMouseDown(event) {
   isDrawing = !isDrawing;
