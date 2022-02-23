@@ -1,5 +1,6 @@
 var selectMode = document.getElementById("select-mode");
 var selectShape = document.getElementById("select-shape");
+var selectPolygonMode = document.getElementById("select-polygon-mode");
 var inputPolygonNode = document.getElementById("input-polygon-node");
 
 var optionShape = document.getElementById("option-shape");
@@ -34,7 +35,7 @@ selectShape.onchange = () => {
   optionPolygonDrawMode.style.visibility = "hidden";
 
   if (selectShape.value == "polygon"){
-    console.log("sadsad")
+    // console.log("sadsad")
     optionPolygonNode.style.visibility = "visible";
     optionPolygonDrawMode.style.visibility = "visible";
   }

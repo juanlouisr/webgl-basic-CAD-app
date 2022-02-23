@@ -11,6 +11,7 @@ var pointOfRef = {};
 var shapeOfRef = [];
 var currVertexToDrag = {};
 var currShapeSelected = {};
+var currPolygonVertices = 0;
 
 function initialize() {
   if (!gl) {
@@ -42,7 +43,13 @@ function resizeCanvas() {
 }
 
 function canvasListenForMouseDown(event) {
-  isDrawing = !isDrawing;
+  isDrawing = !isDrawing; 
+  if (selectMode.value == "draw" 
+    && selectShape.value == "polygon"
+    && currPolygonVertices < inputPolygonNode.value 
+    && selectPolygonMode.value == "per-line") {
+      isDrawing = true;
+    }
   if (!isDrawing)  {
     // reset arraynya
     pointOfRef = {};
@@ -77,11 +84,11 @@ function canvasListenForMouseDown(event) {
       console.log(currShapeSelected);
       if (currShapeSelected.type === undefined)
         break;
-      
+
       color = document.getElementById("shape-color").value;
       shapeColor = hexToRGB(color);
       console.log(data[currShapeSelected.type]["colors"]);
-      var currShapeColorArr 
+      var currShapeColorArr
         = data[currShapeSelected.type]["colors"][currShapeSelected.shapeIndex];
       data[currShapeSelected.type]["colors"][currShapeSelected.shapeIndex]
         = initColorArray(shapeColor, currShapeColorArr.length/4);
@@ -99,7 +106,7 @@ function canvasListenForMouseDown(event) {
       if (currShapeSelected.type === undefined)
         break;
       shapeOfRef = [...data[currShapeSelected.type]["vertices"]
-        [currShapeSelected.shapeIndex]];
+      [currShapeSelected.shapeIndex]];
       pointOfRef = getCursorPos(event);
       break;
   }
@@ -151,15 +158,15 @@ function canvasListenForMouseMove(event) {
         break;
       const pos = getCursorPos(event);
       for (let i = 0; i < data[currShapeSelected.type]["vertices"]
-        [currShapeSelected.shapeIndex].length; i += 2) {
+      [currShapeSelected.shapeIndex].length; i += 2) {
         var deltaX = pos.x - pointOfRef.x;
         var deltaY = pos.y - pointOfRef.y;
         data[currShapeSelected.type]["vertices"]
-          [currShapeSelected.shapeIndex][i] 
+        [currShapeSelected.shapeIndex][i]
           = shapeOfRef[i] + deltaX;
         data[currShapeSelected.type]["vertices"]
-          [currShapeSelected.shapeIndex]
-          [i + 1] = shapeOfRef[i + 1] + deltaY;
+        [currShapeSelected.shapeIndex]
+        [i + 1] = shapeOfRef[i + 1] + deltaY;
       }
       render();
       break;
@@ -194,7 +201,6 @@ function getNearestVertex(event) {
       if (data[type]["vertices"] !== undefined)
         for (var index = 0; index < data[type]["vertices"].length; index++) {
           for (var x = 0; x < data[type]["vertices"][index].length; x += 2) {
-            // console.log(x);
             var a = data[type]["vertices"][index][x];
             var b = data[type]["vertices"][index][x + 1];
             if (pos.x - errorDelta <= a && a <= pos.x + errorDelta) {
@@ -238,14 +244,14 @@ function getLine(event) {
   const pos = getCursorPos(event);
   for (var i = 0; i < data["line"]["vertices"].length; i++) {
     var currLine = data["line"]["vertices"][i];
-    if (isInline({x:currLine[0], y:currLine[1]}, 
-      {x:currLine[2], y:currLine[3]},{x:pos.x, y:pos.y})) {
-        currShapeSelected = {
-          type: "line",
-          shapeIndex: i,
-        };
-        break;
-      }
+    if (isInline({ x: currLine[0], y: currLine[1] },
+      { x: currLine[2], y: currLine[3] }, { x: pos.x, y: pos.y })) {
+      currShapeSelected = {
+        type: "line",
+        shapeIndex: i,
+      };
+      break;
+    }
   }
 }
 
