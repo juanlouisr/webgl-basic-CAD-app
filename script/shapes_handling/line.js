@@ -1,29 +1,28 @@
-function handleMouseLine(event, mode, interactionType){
-  if (mode == "draw"){
-    if (interactionType == "mouse-down"){
+function handleMouseLine(event, mode, interactionType) {
+  if (mode == "draw") {
+    if (interactionType == "mouse-down") {
       const pos = getCursorPos(event);
-      data["line"]["vertices"].push([pos.x, pos.y, pos.x, pos.y]);
-      data["line"]["colors"].push([0, 0, 0, 1, 0, 0, 0, 1]);
-    }
-    else if (interactionType == "mouse-move"){
+      data["line"]["vertices"].push(initVertexArray(pos.x, pos.y, 2));
+      data["line"]["colors"].push(initColorArray(shapeColor, 2));
+    } else if (interactionType == "mouse-move") {
       const pos = getCursorPos(event);
       data["line"]["vertices"][data["line"]["vertices"].length - 1][2] = pos.x;
       data["line"]["vertices"][data["line"]["vertices"].length - 1][3] = pos.y;
       render();
     }
-  }
-
-  else if (mode == "move-point"){
+  } else if (mode == "move-point") {
     const pos = getCursorPos(event);
-    data["line"]["vertices"][currVertexToDrag.shapeIndex][currVertexToDrag.firstVertIdx] =
-      pos.x;
-    data["line"]["vertices"][currVertexToDrag.shapeIndex][currVertexToDrag.firstVertIdx+1] =
-      pos.y;
+    data["line"]["vertices"][currVertexToDrag.shapeIndex][
+      currVertexToDrag.firstVertIdx
+    ] = pos.x;
+    data["line"]["vertices"][currVertexToDrag.shapeIndex][
+      currVertexToDrag.firstVertIdx + 1
+    ] = pos.y;
     render();
   }
 }
 
-function renderLines(shader){
+function renderLines(shader) {
   let lineVertexBuffer = fillBuffer(
     gl,
     gl.ARRAY_BUFFER,
