@@ -10,7 +10,10 @@ var isDrawing = false;
 // var color = document.getElementById("shape-color").value;
 // var shapeColor = hexToRGB(color);
 
+var pointOfRef = {};
+var shapeOfRef = [];
 var currVertexToDrag = {};
+var currShapeSelected = {};
 
 function initialize() {
   if (!gl) {
@@ -44,7 +47,14 @@ window.addEventListener("resize", () => resizeCanvas());
 
 function canvasListenForMouseDown(event) {
   isDrawing = !isDrawing;
-  if (!isDrawing) return;
+  if (!isDrawing)  {
+    // reset arraynya
+    pointOfRef = {};
+    currVertexToDrag = {};
+    currShapeSelected = {};
+    shapeOfRef = [];
+    return;
+  }
 
   switch (selectMode.value) {
     case "draw":
@@ -65,13 +75,32 @@ function canvasListenForMouseDown(event) {
       break;
 
     case "change-color":
+      getShape(event);
+      if (currShapeSelected.type === undefined)
+        break;
       color = document.getElementById("shape-color").value;
       shapeColor = hexToRGB(color);
+      console.log(data[currShapeSelected.type]["colors"]);
+      var currShapeColorArr 
+        = data[currShapeSelected.type]["colors"][currShapeSelected.shapeIndex];
+      data[currShapeSelected.type]["colors"][currShapeSelected.shapeIndex]
+        = initColorArray(shapeColor, currShapeColorArr.length/4);
+      render();
+      isDrawing = !isDrawing;
       break;
 
     case "move-point":
       getNearestVertex(event);
       console.log(currVertexToDrag);
+      break;
+
+    case "move-shape":
+      getShape(event);
+      if (currShapeSelected.type === undefined)
+        break;
+      shapeOfRef = [...data[currShapeSelected.type]["vertices"]
+        [currShapeSelected.shapeIndex]];
+      pointOfRef = getCursorPos(event);
       break;
   }
 }
@@ -100,10 +129,10 @@ function canvasListenForMouseMove(event) {
       }
       break;
 
-    case "change-color":
-      color = document.getElementById("shape-color").value;
-      shapeColor = hexToRGB(color);
-      break;
+    // case "change-color":
+    //   color = document.getElementById("shape-color").value;
+    //   shapeColor = hexToRGB(color);
+    //   break;
 
     case "move-point":
       switch (currVertexToDrag.type) {
@@ -120,6 +149,24 @@ function canvasListenForMouseMove(event) {
           handleMousePolygon(event, "move-point");
           break;
       }
+      break;
+
+    case "move-shape":
+      if (currShapeSelected.type === undefined)
+        break;
+      const pos = getCursorPos(event);
+      for (let i = 0; i < data[currShapeSelected.type]["vertices"]
+        [currShapeSelected.shapeIndex].length; i += 2) {
+        var deltaX = pos.x - pointOfRef.x;
+        var deltaY = pos.y - pointOfRef.y;
+        data[currShapeSelected.type]["vertices"]
+          [currShapeSelected.shapeIndex][i] 
+          = shapeOfRef[i] + deltaX;
+        data[currShapeSelected.type]["vertices"]
+          [currShapeSelected.shapeIndex]
+          [i + 1] = shapeOfRef[i + 1] + deltaY;
+      }
+      render();
       break;
   }
 }
@@ -149,23 +196,44 @@ function getNearestVertex(event) {
   types
     .filter((type) => data[type] !== undefined)
     .forEach((type) => {
-      for (var index = 0; index < data[type]["vertices"].length; index++) {
-        for (var x = 0; x < data[type]["vertices"][index].length; x += 2) {
-          // console.log(x);
-          var a = data[type]["vertices"][index][x];
-          var b = data[type]["vertices"][index][x + 1];
-          if (pos.x - errorDelta <= a && a <= pos.x + errorDelta) {
-            if (pos.y - errorDelta <= b && b <= pos.y + errorDelta) {
-              console.log("Ketemu titik di: " + a + " " + b);
-              currVertexToDrag = {
-                type: type,
-                shapeIndex: index,
-                firstVertIdx: x,
-                x: a,
-                y: b,
-              };
+      if (data[type]["vertices"] !== undefined)
+        for (var index = 0; index < data[type]["vertices"].length; index++) {
+          for (var x = 0; x < data[type]["vertices"][index].length; x += 2) {
+            // console.log(x);
+            var a = data[type]["vertices"][index][x];
+            var b = data[type]["vertices"][index][x + 1];
+            if (pos.x - errorDelta <= a && a <= pos.x + errorDelta) {
+              if (pos.y - errorDelta <= b && b <= pos.y + errorDelta) {
+                console.log("Ketemu titik di: " + a + " " + b);
+                currVertexToDrag = {
+                  type: type,
+                  shapeIndex: index,
+                  firstVertIdx: x,
+                  x: a,
+                  y: b,
+                };
+                break;
+              }
             }
           }
+        }
+    });
+}
+
+function getShape(event) {
+  const pos = getCursorPos(event);
+  const types = ["square", "rectangle", "polygon"];
+  types
+    .filter((type) => data[type] !== undefined)
+    .forEach((type) => {
+      for (var index = 0; index < data[type]["vertices"].length; index++) {
+        var polygons = getArrOfPoints(data[type]["vertices"][index]);
+        if (isInside(polygons, polygons.length, pos)) {
+          currShapeSelected = {
+            type: type,
+            shapeIndex: index,
+          };
+          break;
         }
       }
     });

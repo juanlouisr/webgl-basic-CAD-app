@@ -1,5 +1,3 @@
-var pointOfRef = {};
-
 function handleMousePolygon(event, mode, interactionType){
   if (mode == "draw"){
     if (inputPolygonNode.value < 3) return;
