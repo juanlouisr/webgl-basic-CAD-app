@@ -69,6 +69,7 @@ function handleMousePolygon(event, mode, interactionType){
               data["line"]["colors"].pop();
             }
             currPolygonVertices = 0;
+            isDrawing = false;
           }
           render();
         } 
