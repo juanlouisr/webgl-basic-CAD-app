@@ -32,44 +32,75 @@
         </canvas>
 
         <div id="side-menu-container">
-          <div class="select-options">
-            Select Mode : 
-            <select id="select-mode">
-              <option value="draw">Draw</option>
-              <option value="change-color">Change Color</option>
-              <option value="move-point">Move Point</option>
-              <option value="move-shape">Move Shape</option>
-           </select>
+          <div id="side-menu-interactions-container">
+            <div class="select-options">
+              Select Mode : 
+              <select id="select-mode">
+                <option value="draw">Draw</option>
+                <option value="change-color">Change Color</option>
+                <option value="move-point">Move Point</option>
+                <option value="move-shape">Move Shape</option>
+             </select>
+            </div>
+  
+            <div class="select-options" id="option-shape">
+              Select Shape : 
+              <select id="select-shape">
+                <option value="line">Line</option>
+                <option value="square">Square</option>
+                <option value="rectangle">Rectangle</option>
+                <option value="polygon">Polygon</option>
+              </select>
+            </div>
+  
+            <div class="select-options" id="option-polygon-node">
+              Number of Polygon Node: 
+              <input type="number" id="input-polygon-node" name="input-polygon-node" min=3 value=3>
+            </div>
+  
+            <div class="select-options" id="option-polygon-draw-mode">
+              Polygon Draw Mode: 
+              <select id="select-shape">
+                <option value="parametric">Parametric</option>
+                <option value="per-line">Per Line</option>
+              </select>
+            </div>
+  
+            <div class="select-options" id="option-color">
+              <label for="shape-color">Select Shape Color:</label>
+              <input type="color" id="shape-color" name="shape-color" value="#ff0000">
+            </div>
+  
+            <input type="file" id="btn-load" accept=".json">
+            <button input="button" id="btn-save">Save</button>
+            <button input="button" id="btn-help">Help</button>
+            <button input="button" id="btn-clear">Clear Canvas</button>
+          </div>
+          
+          <div id="help-text">
+            <p>Pilih mode interaksi yang diinginkan melalui "Select Mode"</p>
+            <h3>Draw</h3>
+            <p>Pilih bentuk bidang yang ingin digambar melalui "Select Shape" beserta warna bidang melalui "Select Shape Color"</p>
+            <ul>
+              <li>Untuk Line : Klik pada canvas untuk titik pertama, kemudian drag dan klik pada canvas lagi untuk titik kedua</li>
+              <li>Untuk Square : Klik pada canvas untuk titik pertama, kemudian drag dan klik pada canvas untuk menggambar persegi</li>
+              <li>Untuk Rectangle : Klik pada canvas untuk titik pertama, kemudian drag dan klik pada canvas untuk menggambar persegi panjang</li>
+              <li>Untuk Polygon : Pilih jumlah sudut dan jenis mode penggambaran (parametrik atau per garis), kemudian gambar melalui canvas</li>
+            </ul>
+            <h3>Change Color</h3>
+            <p>Pilih warna baru melalui "Select Shape Color", lalu klik pada bidang yang ingin diubah warnanya</p>
+            <h3>Move Point</h3>
+            <p>Klik pada titik sudut yang ingin digeser, kemudian drag dan klik pada titik baru</p>
+            <h3>Move Shape</h3>
+            <p>Klik pada bidang yang ingin digeser, kemudian drag dan klik pada tempat baru</p>
+            <h3>Save and Load</h3>
+            <p>Untuk menyimpan hasil gambar, klik tombol "Save" dan file data gambar saat ini akan diunduh secara otomatis</p>
+            <p>Untuk me-load hasil gambar yang sudah disimpan sebelumnya, klik tombol "Choose File" dan pilih file yang telah diunduh sebelumnya</p>
+            <h3>Clear Canvas</h3>
+            <p>Untuk membersihkan canvas, klik tombol "Clear Canvas"</p>
           </div>
 
-          <div class="select-options" id="option-shape">
-            Select Shape : 
-            <select id="select-shape">
-              <option value="line">Line</option>
-              <option value="square">Square</option>
-              <option value="rectangle">Rectangle</option>
-              <option value="polygon">Polygon</option>
-            </select>
-          </div>
-
-          <div class="select-options" id="option-polygon-node">
-            Number of Polygon Node: 
-            <input type="number" id="input-polygon-node" name="input-polygon-node" min=3 value=3>
-          </div>
-
-          <div class="select-options" id="option-color">
-            <label for="shape-color">Select Shape Color:</label>
-            <input type="color" id="shape-color" name="shape-color" value="#ff0000">
-          </div>
-
-          <input type="file" id="btn-load" accept=".json">
-          <button input="button" id="btn-save">Save</button>
-          <button input="button" id="btn-help">Help</button>
-          <button input="button" id="btn-clear">Clear Canvas</button>
-
-         
         </div>
-        
 
       </div>
     </html>

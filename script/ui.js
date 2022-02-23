@@ -4,22 +4,24 @@ var inputPolygonNode = document.getElementById("input-polygon-node");
 
 var optionShape = document.getElementById("option-shape");
 var optionPolygonNode = document.getElementById("option-polygon-node");
+var optionPolygonDrawMode = document.getElementById("option-polygon-draw-mode");
 var optionColor = document.getElementById("option-color");
 var shapeColor = hexToRGB(document.getElementById("shape-color").value);
 
+var helpText = document.getElementById("help-text");
+
+// Options
 //temporary
 // optionColor.style.visibility = "hidden";
 // TODO : refactor to make switching better
-
-// set visibility of select options
+optionPolygonNode.style.visibility = "hidden";
+optionPolygonDrawMode.style.visibility = "hidden";
 selectMode.onchange = () => {
   optionShape.style.visibility = "hidden";
-  optionPolygonNode.style.visibility = "hidden";
   optionColor.style.visibility = "hidden";
 
   if (selectMode.value == "draw") {
     optionShape.style.visibility = "visible";
-    optionPolygonNode.style.visibility = "visible";
     optionColor.style.visibility = "visible";
   } else if (selectMode.value == "change-color") {
     optionColor.style.visibility = "visible";
@@ -27,6 +29,19 @@ selectMode.onchange = () => {
     optionColor.style.visibility = "hidden";
   }
 };
+selectShape.onchange = () => {
+  optionPolygonNode.style.visibility = "hidden";
+  optionPolygonDrawMode.style.visibility = "hidden";
+
+  if (selectShape.value == "polygon"){
+    console.log("sadsad")
+    optionPolygonNode.style.visibility = "visible";
+    optionPolygonDrawMode.style.visibility = "visible";
+  }
+}
+
+// Help Text
+helpText.style.visibility = "hidden";
 
 // Button On Clicks
 document.getElementById("btn-load").onchange = (e) => {
@@ -44,7 +59,7 @@ document.getElementById("btn-save").onclick = () => {
 };
 
 document.getElementById("btn-help").onclick = () => {
-  console.log("help");
+  helpText.style.visibility = "visible";
 };
 
 document.getElementById("btn-clear").onclick = () => clearCanvas();

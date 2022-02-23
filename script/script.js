@@ -3,9 +3,6 @@ var CONST_MAX_VERTICES = 500;
 var canvas = document.getElementById("gl-canvas");
 gl = canvas.getContext("webgl");
 
-// var vBufferId = gl.createBuffer();
-// var cBufferId = gl.createBuffer();
-
 var isDrawing = false;
 // var color = document.getElementById("shape-color").value;
 // var shapeColor = hexToRGB(color);
@@ -20,7 +17,7 @@ function initialize() {
     alert("WebGL isn't available");
   }
 
-  // Resize Canvas Size for the first time
+  // Resize Canvas Size
   resizeCanvas();
 
   // Initialize Data
@@ -39,11 +36,10 @@ function initCanvas() {
   gl.clear(gl.COLOR_BUFFER_BIT);
 }
 function resizeCanvas() {
-  gl.canvas.width = (9 / 12) * window.innerWidth;
-  gl.canvas.height = (9 / 12) * window.innerWidth;
+  gl.canvas.width = window.innerWidth * 0.7;
+  gl.canvas.height = window.innerWidth * 0.7;
   gl.viewport(0, 0, canvas.width, canvas.height);
 }
-window.addEventListener("resize", () => resizeCanvas());
 
 function canvasListenForMouseDown(event) {
   isDrawing = !isDrawing;
