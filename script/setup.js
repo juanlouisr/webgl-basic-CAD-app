@@ -34,7 +34,6 @@ function fillBuffer(gl, bindType, data) {
 
   gl.bindBuffer(bindType, buffer);
   gl.bufferData(bindType, data, gl.STATIC_DRAW);
-  // gl.bindBuffer(type, null);
 
   return buffer;
 }
