@@ -12,18 +12,23 @@ var shapeColor = hexToRGB(document.getElementById("shape-color").value);
 var helpText = document.getElementById("help-text");
 
 // Options
-//temporary
-// optionColor.style.visibility = "hidden";
-// TODO : refactor to make switching better
 optionPolygonNode.style.visibility = "hidden";
 optionPolygonDrawMode.style.visibility = "hidden";
 selectMode.onchange = () => {
   optionShape.style.visibility = "hidden";
   optionColor.style.visibility = "hidden";
 
+  optionPolygonNode.style.visibility = "hidden";
+  optionPolygonDrawMode.style.visibility = "hidden";
+
   if (selectMode.value == "draw") {
     optionShape.style.visibility = "visible";
     optionColor.style.visibility = "visible";
+
+    if (selectShape.value == "polygon"){
+      optionPolygonNode.style.visibility = "visible";
+      optionPolygonDrawMode.style.visibility = "visible";
+    }
   } else if (selectMode.value == "change-color") {
     optionColor.style.visibility = "visible";
   } else if (selectMode.value == "move-point") {
@@ -35,7 +40,6 @@ selectShape.onchange = () => {
   optionPolygonDrawMode.style.visibility = "hidden";
 
   if (selectShape.value == "polygon"){
-    // console.log("sadsad")
     optionPolygonNode.style.visibility = "visible";
     optionPolygonDrawMode.style.visibility = "visible";
   }
