@@ -22,10 +22,13 @@ function initialize() {
   resizeCanvas();
 
   // Initialize Data
-  initAndClearData();
+  // initAndClearData();
+  initExampleData();
 
   // Init Canvas
   initCanvas();
+
+  render();
 }
 window.onload = () => initialize();
 
